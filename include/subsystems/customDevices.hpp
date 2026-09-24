@@ -13,5 +13,5 @@
  */
 
 inline pros::MotorGroup intake_motors({7, 8});
-inline pros::Motor left_55w_motor(9, pros::MotorGearset::green, pros::MotorEncoderUnits::degrees);
-inline pros::Motor right_55w_motor(10, pros::MotorGearset::green, pros::MotorEncoderUnits::degrees);
+
+inline pros::Motor cascade_motor(24);

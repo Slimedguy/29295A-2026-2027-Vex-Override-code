@@ -33,6 +33,8 @@ void initialize() {
   // Print our branding over your terminal :D
   ez::ez_template_print();
 
+  cascade_motor.tare_position();
+
   pros::delay(500);  // Stop the user from doing anything while legacy ports configure
 
   // Look at your horizontal tracking wheel and decide if it's in front of the midline of your robot or behind it
@@ -248,7 +250,9 @@ void opcontrol() {
     ez_template_extras();
 
     drivetrain_opcontrol();
-    
+    Cascade_opcontrol();
+
+
     pros::delay(ez::util::DELAY_TIME);  // This is used for timer calculations!  Keep this ez::util::DELAY_TIME
   }
 }
