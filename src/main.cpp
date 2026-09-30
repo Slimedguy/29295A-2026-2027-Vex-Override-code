@@ -250,10 +250,10 @@ void opcontrol() {
     // Gives you some extras to make EZ-Template ezier
     ez_template_extras();
 
-    //drivetrain_opcontrol();
+    drivetrain_opcontrol();
     Cascade_opcontrol();
     Pickupmech_opcontrol();
-
+    arm_opcontrol();
 
     pros::delay(ez::util::DELAY_TIME);  // This is used for timer calculations!  Keep this ez::util::DELAY_TIME
   }

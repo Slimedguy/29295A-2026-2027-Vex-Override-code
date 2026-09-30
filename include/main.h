@@ -50,7 +50,7 @@
 #include "subsystems/customPID.hpp"
 #include "subsystems/cascade.hpp"
 #include "subsystems/pickupmech.hpp"
-
+#include "subsystems/arm.hpp"
 
 /**
  * If you find doing pros::Motor() to be tedious and you'd prefer just to do
