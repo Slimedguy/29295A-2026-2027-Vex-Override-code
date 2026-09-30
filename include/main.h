@@ -49,6 +49,7 @@
 #include "subsystems/driveTrain.hpp"
 #include "subsystems/customPID.hpp"
 #include "subsystems/cascade.hpp"
+#include "subsystems/pickupmech.hpp"
 
 
 /**

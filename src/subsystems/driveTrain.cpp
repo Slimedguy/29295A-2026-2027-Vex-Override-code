@@ -30,7 +30,5 @@ void drivetrain_opcontrol() {
     rightDrv = powerC - turnC;
 
     // Arcade Drive, setting the motor velocity
-    left_55w_motor.move(leftDrv);
-    right_55w_motor.move(rightDrv);
     chassis.drive_set(leftDrv, rightDrv);
 }
