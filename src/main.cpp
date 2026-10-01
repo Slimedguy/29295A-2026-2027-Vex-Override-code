@@ -33,7 +33,7 @@ void initialize() {
   // Print our branding over your terminal :D
   ez::ez_template_print();
 
-  cascade_motor.tare_position();
+  //Cascade_reset();
 
   pros::delay(500);  // Stop the user from doing anything while legacy ports configure
 
@@ -253,7 +253,7 @@ void opcontrol() {
     drivetrain_opcontrol();
     Cascade_opcontrol();
     Pickupmech_opcontrol();
-    arm_opcontrol();
+    hand_opcontrol();
 
     pros::delay(ez::util::DELAY_TIME);  // This is used for timer calculations!  Keep this ez::util::DELAY_TIME
   }

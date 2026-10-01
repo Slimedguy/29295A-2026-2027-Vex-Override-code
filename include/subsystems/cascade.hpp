@@ -4,3 +4,4 @@
 #include "api.h"
 
 extern void Cascade_opcontrol();
+extern void Cascade_reset();
