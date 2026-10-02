@@ -4,4 +4,4 @@
 #include "api.h"
 
 extern void Cascade_opcontrol();
-extern void Cascade_reset();
+extern void Cascade_calibrate();

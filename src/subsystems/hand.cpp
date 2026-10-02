@@ -11,7 +11,7 @@
     ;pickup mech control
 */
 
-void hand_opcontrol() {
+void Pickupmech_opcontrol() {
     if (master.get_digital(DIGITAL_LEFT)) {
         pickupmech_motor.move(127);
     }
@@ -21,7 +21,9 @@ void hand_opcontrol() {
     else {
         pickupmech_motor.move(0);
     }
+}
 
+void Wrist_autcontrol() {
     if (cascade_sensor.get_position() < 180) {
         wrist_motor.move_absolute(0, 200);
     }
@@ -30,4 +32,4 @@ void hand_opcontrol() {
     }
 }
 
-void hand_reset();
+void Hand_calibrate();

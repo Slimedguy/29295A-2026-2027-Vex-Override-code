@@ -33,7 +33,8 @@ void initialize() {
   // Print our branding over your terminal :D
   ez::ez_template_print();
 
-  //Cascade_reset();
+  //Cascade_calibrate();
+  //Hand_calibrate();
 
   pros::delay(500);  // Stop the user from doing anything while legacy ports configure
 
@@ -250,10 +251,11 @@ void opcontrol() {
     // Gives you some extras to make EZ-Template ezier
     ez_template_extras();
 
-    drivetrain_opcontrol();
+    Drivetrain_opcontrol();
     Cascade_opcontrol();
+    Wrist_autcontrol();
     Pickupmech_opcontrol();
-    hand_opcontrol();
+
 
     pros::delay(ez::util::DELAY_TIME);  // This is used for timer calculations!  Keep this ez::util::DELAY_TIME
   }

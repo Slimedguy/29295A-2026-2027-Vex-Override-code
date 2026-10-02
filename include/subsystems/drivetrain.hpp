@@ -4,4 +4,4 @@
 #include "api.h"
 
 extern Drive chassis;
-extern void drivetrain_opcontrol();
+extern void Drivetrain_opcontrol();

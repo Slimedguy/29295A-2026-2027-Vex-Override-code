@@ -2,12 +2,12 @@
 
 void Pickupmech_opcontrol() {
      if (master.get_digital(DIGITAL_UP)) {
-        pickupmech_motor.move(127);
+        pickupmech_motor.move(50);
     }
     else if (master.get_digital(DIGITAL_DOWN)) {
-        pickupmech_motor.move(-127);
+        pickupmech_motor.move(-50);
     }
     else {
-        pickupmech_motor.move(0);
+        pickupmech_motor.brake();
     }
 }

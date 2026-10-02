@@ -1,12 +1,20 @@
 #include "main.h"
 
-int target;
+/*
+    ? Cascade operator control
+    ? Cascade calibrate function
+
+    TODO:
+    :Edit values
+*/
+
+int target = 0;
 void Cascade_opcontrol() {
 
-    if (master.get_digital(DIGITAL_L1)) {
+    if (master.get_digital(DIGITAL_R1)) {
         target -= 10;
     }
-    else if (master.get_digital(DIGITAL_R2)) {
+    else if (master.get_digital(DIGITAL_L1)) {
         target += 10;
     }
 
@@ -14,19 +22,19 @@ void Cascade_opcontrol() {
     cascade_motor.move(cascadePID.compute(cascade_sensor.get_position() / 100));
 }
 
-void Cascade_reset() {
+void Cascade_calibrate() {
     double starttime = pros::millis();
-    cascade_motor.move_velocity(-30);
+    cascade_motor.move_velocity(15);
     while((pros::millis() - starttime) < 2500){
         pros::delay(20);
     }
     
-    cascade_motor.move_velocity(30);
+    cascade_motor.move_velocity(-15);
     while ( cascade_limit_switch.get_value()) {
         pros::delay(20);
     }
     cascade_motor.brake();
-    cascade_sensor.reset_position();
+    cascade_sensor.set_position(0);
 }
 /*
 void Cascade_opcontrol() {

@@ -14,7 +14,7 @@ bool halfSpeed = false;
 double leftDrv;
 double rightDrv;
 
-void drivetrain_opcontrol() {
+void Drivetrain_opcontrol() {
     // Setting power and turn variables
     power = master.get_analog(ANALOG_LEFT_Y);  // Left stick vertical
     turn = master.get_analog(ANALOG_RIGHT_X);  // Right stick horizontal
