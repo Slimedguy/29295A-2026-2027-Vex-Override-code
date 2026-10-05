@@ -12,14 +12,28 @@
 */
 
 void Pickupmech_opcontrol() {
-    if (master.get_digital(DIGITAL_LEFT)) {
+    if (master.get_digital(DIGITAL_L2)) {
         pickupmech_motor.move(127);
     }
-    else if (master.get_digital(DIGITAL_RIGHT)) {
+    else if (master.get_digital(DIGITAL_R2)) {
         pickupmech_motor.move(-127);
     }
     else {
         pickupmech_motor.move(0);
+        pickupmech_motor.brake();
+    }
+}
+
+void Wrist_opcontrol() {
+    if (master.get_digital(DIGITAL_LEFT)) {
+        wrist_motor.move(127);
+    }
+    else if (master.get_digital(DIGITAL_RIGHT)) {
+        wrist_motor.move(-127);
+    }
+    else {
+        wrist_motor.move(0);
+        wrist_motor.brake();
     }
 }
 
@@ -32,4 +46,4 @@ void Wrist_autcontrol() {
     }
 }
 
-void Hand_calibrate();
+//void Hand_calibrate();

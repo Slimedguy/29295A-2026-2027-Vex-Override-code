@@ -6,20 +6,24 @@
 
     TODO:
     :Edit values
+    :Fix cascade code
 */
 
-int target = 0;
+int cascade_target = 0;
 void Cascade_opcontrol() {
 
     if (master.get_digital(DIGITAL_R1)) {
-        target -= 10;
+        cascade_motor.move(127);
+        cascade_target = cascade_sensor.get_position() / 100.0;
     }
     else if (master.get_digital(DIGITAL_L1)) {
-        target += 10;
+        cascade_motor.move(-127);
+        cascade_target = cascade_sensor.get_position() / 100.0;
     }
-
-    cascadePID.target_set(target);
-    cascade_motor.move(cascadePID.compute(cascade_sensor.get_position() / 100));
+    else {
+        cascadePID.target_set(cascade_target);
+        cascade_motor.move(cascadePID.compute(cascade_sensor.get_position() / 100.0));
+    }
 }
 
 void Cascade_calibrate() {
@@ -30,8 +34,8 @@ void Cascade_calibrate() {
     }
     
     cascade_motor.move_velocity(-15);
-    while ( cascade_limit_switch.get_value()) {
-        pros::delay(20);
+    while (cascade_limit_switch.get_value()) {
+        pros::delay(15);
     }
     cascade_motor.brake();
     cascade_sensor.set_position(0);

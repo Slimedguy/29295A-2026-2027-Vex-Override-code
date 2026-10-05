@@ -5,4 +5,5 @@
 
 extern void Pickupmech_opcontrol();
 extern void Wrist_autcontrol();
-extern void Hand_calibrate();
+extern void Wrist_opcontrol();
+//extern void Hand_calibrate();

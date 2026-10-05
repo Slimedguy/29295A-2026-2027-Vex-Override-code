@@ -7,9 +7,9 @@
  ** Custom Devices
  *TODO: 
  *: All motors for intake.
- *: All motors for cascade lift.
+ *; All motors for cascade lift.
  *: Other things I don't know about.
- *: one of those things was a rotation sensor.
+ *; one of those things was a rotation sensor.
  */
 
 inline pros::Motor intake_motors(7);

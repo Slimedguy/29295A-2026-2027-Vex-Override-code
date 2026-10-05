@@ -33,6 +33,8 @@ void initialize() {
   // Print our branding over your terminal :D
   ez::ez_template_print();
 
+  cascade_sensor.reset_position();
+  cascade_target = cascade_sensor.get_position() / 100.0;
   //Cascade_calibrate();
   //Hand_calibrate();
 
@@ -245,7 +247,8 @@ void ez_template_extras() {
 void opcontrol() {
   // This is preference to what you like to drive on
   chassis.drive_brake_set(MOTOR_BRAKE_COAST);
-  cascade_motor.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
+  cascade_motor.set_brake_mode(MOTOR_BRAKE_HOLD);
+  wrist_motor.set_brake_mode(MOTOR_BRAKE_HOLD);
 
   while (true) {
     // Gives you some extras to make EZ-Template ezier
@@ -253,9 +256,9 @@ void opcontrol() {
 
     Drivetrain_opcontrol();
     Cascade_opcontrol();
-    Wrist_autcontrol();
+    //Wrist_autcontrol();
     Pickupmech_opcontrol();
-
+    Wrist_opcontrol();
 
     pros::delay(ez::util::DELAY_TIME);  // This is used for timer calculations!  Keep this ez::util::DELAY_TIME
   }
