@@ -32,7 +32,6 @@ void Wrist_opcontrol() {
         wrist_motor.move(-127);
     }
     else {
-        wrist_motor.move(0);
         wrist_motor.brake();
     }
 }

@@ -16,9 +16,9 @@ inline pros::Motor intake_motors(7);
 
 inline pros::Motor cascade_motor(-16);
 
-inline pros::MotorGroup pickupmech_motor({11, -19}, pros::v5::MotorGears::green);
+inline pros::MotorGroup pickupmech_motor({11, 19}, pros::v5::MotorGears::green);
 inline pros::Motor wrist_motor(15, pros::v5::MotorGears::green);
 
-inline pros::Rotation cascade_sensor(1);
+inline pros::Rotation cascade_sensor(-12);
 
-inline pros::ADIDigitalIn cascade_limit_switch('A');
+inline pros::adi::DigitalIn cascade_limit_switch('B');
