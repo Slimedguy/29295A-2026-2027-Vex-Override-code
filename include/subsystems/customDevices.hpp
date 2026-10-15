@@ -21,4 +21,4 @@ inline pros::Motor wrist_motor(15, pros::v5::MotorGears::green);
 
 inline pros::Rotation cascade_sensor(-12);
 
-inline pros::adi::DigitalIn cascade_limit_switch('B');
+inline pros::adi::DigitalIn cascade_limit_switch('G');

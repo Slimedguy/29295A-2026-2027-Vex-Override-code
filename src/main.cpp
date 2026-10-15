@@ -81,9 +81,8 @@ void initialize() {
   ez::as::initialize();
   master.rumble(chassis.drive_imu_calibrated() ? "." : "---");
   
-  //Cascade_calibrate();
-  cascade_sensor.set_position(0);
-  master.rumble(".......");
+  Cascade_calibrate();
+  //cascade_sensor.set_position(0);
 }
 
 /**

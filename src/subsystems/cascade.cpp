@@ -12,7 +12,7 @@
 
 //setup
 int cascade_target = 0;
-int max_cascade_height_deg = 360 * 2.45; // master control changing this changes every other position
+int max_cascade_height_deg = 360 * 2.44; // master control changing this changes every other position
 int minimum_cascade_height_deg = 0;
 string state = "manual";
 
