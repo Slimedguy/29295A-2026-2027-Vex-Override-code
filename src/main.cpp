@@ -82,6 +82,9 @@ void initialize() {
   master.rumble(chassis.drive_imu_calibrated() ? "." : "---");
   
   Cascade_calibrate();
+  cascade_sensor.reset();
+  wrist_motor.set_encoder_units(pros::MotorEncoderUnits::deg);
+  wrist_motor.tare_position_all();
   //cascade_sensor.set_position(0);
 }
 
@@ -255,7 +258,7 @@ void opcontrol() {
     ez_template_extras();
 
     Drivetrain_opcontrol();
-    Cascade_opcontrol();
+    //Cascade_opcontrol();
     //Wrist_autcontrol();
     Pickupmech_opcontrol();
     Wrist_opcontrol();

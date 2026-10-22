@@ -12,9 +12,10 @@
 
 //setup
 int cascade_target = 0;
-int max_cascade_height_deg = 360 * 2.44; // master control changing this changes every other position
+double max_cascade_height_deg = -792; // master control changing this changes every other position
 int minimum_cascade_height_deg = 0;
-string state = "manual";
+int cascade_state = 0;
+std::vector<int> positions = {15, 33, 50, 66, 90, 100};
 
 //region markers
 int forth_cascade_region_deg = max_cascade_height_deg * 0.9;
@@ -23,71 +24,20 @@ int second_cascade_region_deg = max_cascade_height_deg * 0.5;
 int first_cascade_region_deg = max_cascade_height_deg * 0.3;
 
 void Cascade_opcontrol() {
- // these control the speed that the cascade rises based on total posiiton
-    if (master.get_digital(DIGITAL_R1) && state == "manual") {
-        if (cascade_sensor.get_position() > forth_cascade_region_deg) {
-            cascade_motor.move(127 * 0.9);
-            cascade_target = cascade_sensor.get_position() / 100.0;
-        }
-        else if (cascade_sensor.get_position() > third_cascade_region_deg) {
-            cascade_motor.move(127 * 0.95);
-            cascade_target = cascade_sensor.get_position() / 100.0;
-        }
-        else {
-            cascade_motor.move(127 * 1);
-            cascade_target = cascade_sensor.get_position() / 100.0;
-        }
+ 
+    if (master.get_digital_new_press(DIGITAL_R2)) {
+        cascade_target = -500;
     }
-    else if (master.get_digital(DIGITAL_L1) && state == "manual") {
-        if (cascade_sensor.get_position() < forth_cascade_region_deg) {
-            cascade_motor.move(-127 * 1);
-            cascade_target = cascade_sensor.get_position() / 100.0;
-        }
-        else if (cascade_sensor.get_position() < third_cascade_region_deg) {
-            cascade_motor.move(-127 * 0.95);
-            cascade_target = cascade_sensor.get_position() / 100.0;
-        }
-        else if (cascade_sensor.get_position() < second_cascade_region_deg) {
-            cascade_motor.move(-127 * 0.85);
-            cascade_target = cascade_sensor.get_position() / 100.0;
-        }
-        else if (cascade_sensor.get_position() < first_cascade_region_deg) {
-            cascade_motor.move(-127 * 0.8);
-            cascade_target = cascade_sensor.get_position() / 100.0;
-        }
-        else {
-            cascade_motor.move(-127);
-            cascade_target = cascade_sensor.get_position() / 100.0;
-        }
+    else if (master.get_digital_new_press(DIGITAL_L2)) {
+        cascade_target = max_cascade_height_deg;
     }
-    else if (state == "manual") {
-        cascade_motor.brake();
+    else {
+        cascade_target = max_cascade_height_deg / positions[cascade_state] * 100;
+        cascadePID.target_set(cascade_target);
+        cascade_motor.move(-cascadePID.compute(cascade_sensor.get_position() / 100.0));
     }
 
-    int load_motor_deg = 0;
-    if (state == "load") {
-        cascadePID.target_set(load_motor_deg / 0.25); // gear ratio of 12-48 in the wrist motor
-        cascade_motor.move(cascadePID.compute(cascade_sensor.get_position() / 100.0));
-    }
-
-    if (master.get_digital_new_press(DIGITAL_UP)) { // moves up the list of states
-        if (state == "load") {
-            state == "manual";
-        }
-        else if (state == "load") {
-            state == "manual";
-        }
-    }
-    else if (master.get_digital_new_press(DIGITAL_DOWN)) { // moves down the list of states
-        if (state == "load") {
-            state == "manual";
-        }
-        else if (state == "manual") {
-            state == "load";
-        }
-
-    }
-
+    pros::delay(10);
 
     // if (master.get_digital(DIGITAL_R1)) {
     //     cascade_motor.move(127);
@@ -127,7 +77,7 @@ void Cascade_calibrate() {
         pros::delay(10);
     }
     cascade_motor.brake();
-    cascade_sensor.reset_position();
+    cascade_sensor.set_position(0);
 }
 /*
 void Cascade_opcontrol() {
