@@ -11,7 +11,7 @@ ez::Drive chassis(
     {-5, 6, -7},     // Left Chassis Ports (negative port will reverse it!)
     {3, -2, 4},  // Right Chassis Ports (negative port will reverse it!)
 
-    7,      // IMU Port
+    10,      // IMU Port
     3.25,  // Wheel Diameter (Remember, 4" wheels without screw holes are actually 4.125!)
     450);   // Wheel RPM = cartridge * (motor gear / wheel gear)
 
@@ -81,8 +81,8 @@ void initialize() {
   ez::as::initialize();
   master.rumble(chassis.drive_imu_calibrated() ? "." : "---");
   
-  Cascade_calibrate();
-  cascade_sensor.reset();
+  //Cascade_calibrate();
+  //cascade_sensor.reset();
   wrist_motor.set_encoder_units(pros::MotorEncoderUnits::deg);
   wrist_motor.tare_position_all();
   //cascade_sensor.set_position(0);
@@ -252,13 +252,14 @@ void opcontrol() {
   chassis.drive_brake_set(MOTOR_BRAKE_COAST);
   cascade_motor.set_brake_mode(MOTOR_BRAKE_HOLD);
   wrist_motor.set_brake_mode(MOTOR_BRAKE_HOLD);
+  pickupmech_motor.set_brake_mode(MOTOR_BRAKE_COAST);
 
   while (true) {
     // Gives you some extras to make EZ-Template ezier
     ez_template_extras();
 
     Drivetrain_opcontrol();
-    //Cascade_opcontrol();
+    Cascade_opcontrol();
     //Wrist_autcontrol();
     Pickupmech_opcontrol();
     Wrist_opcontrol();

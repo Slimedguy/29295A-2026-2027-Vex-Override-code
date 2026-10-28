@@ -15,27 +15,26 @@ std::vector<double> wrist_state = {(3 /4), (90 / 4), (180 / 4)};
 int position = 0;
 
 void Pickupmech_opcontrol() {
-    if (master.get_digital(DIGITAL_Y)) {
+    if (master.get_digital(DIGITAL_DOWN)) {
         pickupmech_motor.move(127);
     }
     else if (master.get_digital(DIGITAL_LEFT)) {
         pickupmech_motor.move(-127);
     }
     else {
-        pickupmech_motor.move(0);
         pickupmech_motor.brake();
     }
 }
 
 void Wrist_opcontrol() {
-    if (master.get_digital_new_press(DIGITAL_R1)) {
-        wrist_motor.move_absolute(300, 200);
+    if (master.get_digital_new_press(DIGITAL_R2)) {
+        wrist_motor.move(127);
     }
-    else if (master.get_digital_new_press(DIGITAL_L1)) {
-        wrist_motor.move_absolute(0, 200);
+    else if (master.get_digital_new_press(DIGITAL_L2)) {
+        wrist_motor.move(-127);
     }
     else {
-        //wrist_motor.move_absolute(wrist_state[-position], 200);
+        wrist_motor.brake();
     }
 }
 

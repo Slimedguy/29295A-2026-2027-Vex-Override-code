@@ -15,7 +15,7 @@ const int SWING_SPEED = 110;
 ///
 void default_constants() {
   // P, I, D, and Start I
-  chassis.pid_drive_constants_set(20.0, 0.0, 100.0);         // Fwd/rev constants, used for odom and non odom motions
+  chassis.pid_drive_constants_set(14.5, 0.2, 15.0);         // Fwd/rev constants, used for odom and non odom motions
   chassis.pid_heading_constants_set(11.0, 0.0, 20.0);        // Holds the robot straight while going forward without odom
   chassis.pid_turn_constants_set(3.0, 0.05, 20.0, 15.0);     // Turn in place constants
   chassis.pid_swing_constants_set(6.0, 0.0, 65.0);           // Swing constants
@@ -25,7 +25,7 @@ void default_constants() {
   // Exit conditions
   chassis.pid_turn_exit_condition_set(90_ms, 3_deg, 250_ms, 7_deg, 500_ms, 500_ms);
   chassis.pid_swing_exit_condition_set(90_ms, 3_deg, 250_ms, 7_deg, 500_ms, 500_ms);
-  chassis.pid_drive_exit_condition_set(90_ms, 1_in, 250_ms, 3_in, 500_ms, 500_ms);
+  chassis.pid_drive_exit_condition_set(90_ms, 1_in, 250_ms, 2_in, 500_ms, 500_ms);
   chassis.pid_odom_turn_exit_condition_set(90_ms, 3_deg, 250_ms, 7_deg, 500_ms, 750_ms);
   chassis.pid_odom_drive_exit_condition_set(90_ms, 1_in, 250_ms, 3_in, 500_ms, 750_ms);
   chassis.pid_turn_chain_constant_set(3_deg);
@@ -34,7 +34,7 @@ void default_constants() {
 
   // Slew constants
   chassis.slew_turn_constants_set(3_deg, 70);
-  chassis.slew_drive_constants_set(3_in, 70);
+  chassis.slew_drive_constants_set(2_in, 20);
   chassis.slew_swing_constants_set(3_in, 80);
 
   // The amount that turns are prioritized over driving in odom motions
@@ -59,12 +59,18 @@ void drive_example() {
 
   chassis.pid_drive_set(24_in, DRIVE_SPEED, true);
   chassis.pid_wait();
-
+  
   chassis.pid_drive_set(-12_in, DRIVE_SPEED);
+  chassis.pid_wait();
+  
+  chassis.pid_drive_set(12_in, DRIVE_SPEED);
   chassis.pid_wait();
 
   chassis.pid_drive_set(-12_in, DRIVE_SPEED);
-  chassis.pid_wait();
+  chassis.pid_wait_quick_chain();
+
+  chassis.pid_drive_set(-12_in, DRIVE_SPEED);
+  chassis.pid_wait_quick_chain();
 }
 
 ///

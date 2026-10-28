@@ -25,32 +25,32 @@ int first_cascade_region_deg = max_cascade_height_deg * 0.3;
 
 void Cascade_opcontrol() {
  
-    if (master.get_digital_new_press(DIGITAL_R2)) {
-        cascade_target = -500;
-    }
-    else if (master.get_digital_new_press(DIGITAL_L2)) {
-        cascade_target = max_cascade_height_deg;
-    }
-    else {
-        cascade_target = max_cascade_height_deg / positions[cascade_state] * 100;
-        cascadePID.target_set(cascade_target);
-        cascade_motor.move(-cascadePID.compute(cascade_sensor.get_position() / 100.0));
-    }
-
-    pros::delay(10);
-
-    // if (master.get_digital(DIGITAL_R1)) {
-    //     cascade_motor.move(127);
-    //     cascade_target = cascade_sensor.get_position() / 100.0;
+    // if (master.get_digital(DIGITAL_R2)) {
+    //     cascade_target = -500;
     // }
-    // else if (master.get_digital(DIGITAL_L1)) {
-    //     cascade_motor.move(-127);
-    //     cascade_target = cascade_sensor.get_position() / 100.0;
+    // else if (master.get_digital(DIGITAL_L2)) {
+    //     cascade_target = max_cascade_height_deg;
     // }
     // else {
+    //     cascade_target = max_cascade_height_deg / positions[cascade_state] * 100;
     //     cascadePID.target_set(cascade_target);
-    //     cascade_motor.move(cascadePID.compute(cascade_sensor.get_position() / 100.0));
+    //     cascade_motor.move(-cascadePID.compute(cascade_sensor.get_position() / 100.0));
     // }
+
+    // pros::delay(10);
+
+    if (master.get_digital(DIGITAL_R1)) {
+        cascade_motor.move(127);
+        cascade_target = cascade_sensor.get_position() / 100.0;
+    }
+    else if (master.get_digital(DIGITAL_L1)) {
+        cascade_motor.move(-127);
+        cascade_target = cascade_sensor.get_position() / 100.0;
+    }
+    else {
+        cascadePID.target_set(cascade_target);
+        cascade_motor.move(cascadePID.compute(cascade_sensor.get_position() / 100.0));
+    }
 }
 
 void Cascade_calibrate() {
