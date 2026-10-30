@@ -11,27 +11,52 @@
     ;pickup mech control
 */
 
-std::vector<double> wrist_state = {(3 /4), (90 / 4), (180 / 4)};
-int position = 0;
+int wristState = 0;
 
 void Pickupmech_opcontrol() {
     if (master.get_digital(DIGITAL_DOWN)) {
         pickupmech_motor.move(127);
     }
-    else if (master.get_digital(DIGITAL_LEFT)) {
+    else if (master.get_digital(DIGITAL_RIGHT)) {
         pickupmech_motor.move(-127);
     }
     else {
+        pickupmech_motor.move(0);
         pickupmech_motor.brake();
     }
 }
 
 void Wrist_opcontrol() {
     if (master.get_digital_new_press(DIGITAL_R2)) {
-        wrist_motor.move(127);
+        wristState = 1;
     }
     else if (master.get_digital_new_press(DIGITAL_L2)) {
-        wrist_motor.move(-127);
+        wristState = 0;
+    }
+
+    if (wristState == 1) {
+        if (wrist_motor.get_current_draw() >= 2000) {
+            wrist_motor.brake();
+            wristState = 2;
+        }
+        else {
+            wrist_motor.move(-127);
+        }
+    }
+    else if (wristState == 0) {
+        if (wrist_motor.get_current_draw() >= 2000) {
+            wrist_motor.brake();
+            wristState = 3;
+        }
+        else {
+            wrist_motor.move(127);
+        }
+    }
+    else if (wristState == 2) {
+        wrist_motor.move(-5);
+    }
+    else if (wristState == 3) {
+        wrist_motor.move(10);
     }
     else {
         wrist_motor.brake();

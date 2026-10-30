@@ -11,46 +11,60 @@
 */
 
 //setup
-int cascade_target = 0;
-double max_cascade_height_deg = -792; // master control changing this changes every other position
+int cascade_target = 0.0;
+int max_cascade_height_deg = -720; // master control changing this changes every other position, rotation sensor detects reverse as up
 int minimum_cascade_height_deg = 0;
 int cascade_state = 0;
 std::vector<int> positions = {15, 33, 50, 66, 90, 100};
 
+int buttontime = 200;
+
 //region markers
-int forth_cascade_region_deg = max_cascade_height_deg * 0.9;
-int third_cascade_region_deg = max_cascade_height_deg * 0.7;
-int second_cascade_region_deg = max_cascade_height_deg * 0.5;
-int first_cascade_region_deg = max_cascade_height_deg * 0.3;
+double forth_cascade_region_deg = max_cascade_height_deg * 0.9;
+double third_cascade_region_deg = max_cascade_height_deg * 0.7;
+double second_cascade_region_deg = max_cascade_height_deg * 0.5;
+double first_cascade_region_deg = max_cascade_height_deg * 0.3;
 
 void Cascade_opcontrol() {
  
-    // if (master.get_digital(DIGITAL_R2)) {
-    //     cascade_target = -500;
-    // }
-    // else if (master.get_digital(DIGITAL_L2)) {
-    //     cascade_target = max_cascade_height_deg;
-    // }
-    // else {
-    //     cascade_target = max_cascade_height_deg / positions[cascade_state] * 100;
-    //     cascadePID.target_set(cascade_target);
-    //     cascade_motor.move(-cascadePID.compute(cascade_sensor.get_position() / 100.0));
-    // }
-
-    // pros::delay(10);
-
-    if (master.get_digital(DIGITAL_R1)) {
-        cascade_motor.move(127);
-        cascade_target = cascade_sensor.get_position() / 100.0;
-    }
-    else if (master.get_digital(DIGITAL_L1)) {
-        cascade_motor.move(-127);
-        cascade_target = cascade_sensor.get_position() / 100.0;
+    if (master.get_digital_new_press(DIGITAL_R1)) {
+        int time = pros::millis();
+        bool held = false;
+        while (true) {
+            if (pros::millis() - buttontime < time && master.get_digital(DIGITAL_R1) == false) {
+                held = false;
+                break;
+            }
+            else if (pros::millis() - buttontime >= time && master.get_digital(DIGITAL_R1) == true) {
+                held = true;
+                break;
+            }
+            pros::delay(2);
+        }
+        if (held == true) {
+            while (master.get_digital(DIGITAL_R1)) {
+                cascade_motor.move(127);
+                cascade_target = cascade_sensor.get_position() / 100.0;
+            }
+        }
+        else if (held == false) {
+            cascade_state += 1;
+            cascade_target = max_cascade_height_deg * (positions[cascade_state] / 100);
+        }
     }
     else {
         cascadePID.target_set(cascade_target);
         cascade_motor.move(cascadePID.compute(cascade_sensor.get_position() / 100.0));
     }
+
+    // if (master.get_digital(DIGITAL_R1)) {
+    //     cascade_motor.move(127);
+    //     cascade_target = cascade_sensor.get_position() / 100.0;
+    // }
+    // else if (master.get_digital(DIGITAL_L1)) {
+    //     cascade_motor.move(-127);
+    //     cascade_target = cascade_sensor.get_position() / 100.0;
+    // }
 }
 
 void Cascade_calibrate() {

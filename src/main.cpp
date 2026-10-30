@@ -60,9 +60,9 @@ void initialize() {
   
   // Autonomous Selector using LLEMU
   ez::as::auton_selector.autons_add({
+    {"Drive and Turn\n\nDrive forward, turn, come back", drive_and_turn},
     {"Drive\n\nDrive forward and come back", drive_example},
     {"Turn\n\nTurn 3 times.", turn_example},
-    {"Drive and Turn\n\nDrive forward, turn, come back", drive_and_turn},
     {"Drive and Turn\n\nSlow down during drive", wait_until_change_speed},
     {"Swing Turn\n\nSwing in an 'S' curve", swing_example},
     {"Motion Chaining\n\nDrive forward, turn, and come back, but blend everything together :D", motion_chaining},
@@ -85,7 +85,10 @@ void initialize() {
   //cascade_sensor.reset();
   wrist_motor.set_encoder_units(pros::MotorEncoderUnits::deg);
   wrist_motor.tare_position_all();
-  //cascade_sensor.set_position(0);
+  cascade_sensor.set_position(0);
+  cascade_motor.set_brake_mode(MOTOR_BRAKE_HOLD);
+  wrist_motor.set_brake_mode(MOTOR_BRAKE_HOLD);
+  pickupmech_motor.set_brake_mode(MOTOR_BRAKE_COAST);
 }
 
 /**
@@ -250,16 +253,14 @@ void ez_template_extras() {
 void opcontrol() {
   // This is preference to what you like to drive on
   chassis.drive_brake_set(MOTOR_BRAKE_COAST);
-  cascade_motor.set_brake_mode(MOTOR_BRAKE_HOLD);
-  wrist_motor.set_brake_mode(MOTOR_BRAKE_HOLD);
-  pickupmech_motor.set_brake_mode(MOTOR_BRAKE_COAST);
+  pros::Task Wrist_task(Cascade_opcontrol);
 
   while (true) {
     // Gives you some extras to make EZ-Template ezier
-    ez_template_extras();
+    //ez_template_extras();
 
-    Drivetrain_opcontrol();
-    Cascade_opcontrol();
+    //Drivetrain_opcontrol();
+    //Cascade_opcontrol();
     //Wrist_autcontrol();
     Pickupmech_opcontrol();
     Wrist_opcontrol();

@@ -1,7 +1,7 @@
 {
   "py/object": "pros.conductor.project.Project",
   "py/state": {
-    "project_name": "MAIN",
+    "project_name": "tabletop",
     "target": "v5",
     "templates": {
       "EZ-Template": {
@@ -426,8 +426,8 @@
     "upload_options": {
       "description": "29295A code",
       "icon": "X",
-      "slot": 1,
-      "after": "run"
+      "slot": 3,
+      "after": "screen"
     },
     "use_early_access": false
   }
