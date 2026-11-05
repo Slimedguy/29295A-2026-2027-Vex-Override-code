@@ -13,24 +13,24 @@
 
 int wristState = 0;
 
-void Pickupmech_opcontrol() {
-    if (master.get_digital(DIGITAL_DOWN)) {
-        pickupmech_motor.move(127);
+void Ratchet_claw_opcontrol() {
+    if (master.get_digital(DIGITAL_R2)) {
+        Ratchet_claw.move(127);
     }
-    else if (master.get_digital(DIGITAL_RIGHT)) {
-        pickupmech_motor.move(-127);
+    else if (master.get_digital(DIGITAL_L2)) {
+        Ratchet_claw.move(-127);
     }
     else {
-        pickupmech_motor.move(0);
-        pickupmech_motor.brake();
+        Ratchet_claw.move(0);
+        Ratchet_claw.brake();
     }
 }
 
 void Wrist_opcontrol() {
-    if (master.get_digital_new_press(DIGITAL_R2)) {
+    if (master.get_digital_new_press(DIGITAL_DOWN)) {
         wristState = 1;
     }
-    else if (master.get_digital_new_press(DIGITAL_L2)) {
+    else if (master.get_digital_new_press(DIGITAL_RIGHT)) {
         wristState = 0;
     }
 

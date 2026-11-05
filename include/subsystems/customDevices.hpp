@@ -12,11 +12,11 @@
  *; one of those things was a rotation sensor.
  */
 
-inline pros::Motor intake_motors(19);
+inline pros::Motor intake_motors(19); // intake is grouped with the rachet claw
 
 inline pros::Motor cascade_motor(-16);
 
-inline pros::Motor pickupmech_motor(17, pros::v5::MotorGears::green);
+inline pros::MotorGroup Ratchet_claw({17, -19}, pros::v5::MotorGears::green);
 inline pros::Motor wrist_motor(15, pros::v5::MotorGears::green);
 
 inline pros::Rotation cascade_sensor(-12);
