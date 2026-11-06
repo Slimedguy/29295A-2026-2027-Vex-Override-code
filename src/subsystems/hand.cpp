@@ -11,7 +11,7 @@
     ;pickup mech control
 */
 
-int wristState = 0;
+int wristState = 1;
 
 void Ratchet_claw_opcontrol() {
     if (master.get_digital(DIGITAL_R2)) {

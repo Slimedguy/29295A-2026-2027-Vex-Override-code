@@ -81,8 +81,7 @@ void initialize() {
   ez::as::initialize();
   master.rumble(chassis.drive_imu_calibrated() ? "." : "---");
   
-  //Cascade_calibrate();
-  //cascade_sensor.reset();
+  cascade_sensor.reset();
   wrist_motor.set_encoder_units(pros::MotorEncoderUnits::deg);
   wrist_motor.tare_position_all();
   cascade_sensor.set_position(0);
@@ -258,11 +257,11 @@ void opcontrol() {
   while (true) {
     // Gives you some extras to make EZ-Template ezier
     //ez_template_extras();
-
+    ez::screen_print("cascade position centigrade: " + to_string(cascade_sensor.get_position() / 100), 0);
     Drivetrain_opcontrol();
-    //Cascade_opcontrol();
+    //Cascade_opcontrol(); //being run in task above line 255.
     //Wrist_autcontrol();
-    Ratchet_claw_opcontrol();
+    Ratchet_claw_opcontrol(); 
     Wrist_opcontrol();
     pros::delay(ez::util::DELAY_TIME);  // This is used for timer calculations!  Keep this ez::util::DELAY_TIME
   }
