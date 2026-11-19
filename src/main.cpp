@@ -7,24 +7,26 @@
 
 // Chassis constructor
 ez::Drive chassis(
-    // These are your drive motors, the first motor is used for sensing!
-    {-5, 6, -7},     // Left Chassis Ports (negative port will reverse it!)
-    {3, -2, 4},  // Right Chassis Ports (negative port will reverse it!)
-
-    10,      // IMU Port
-    3.25,  // Wheel Diameter (Remember, 4" wheels without screw holes are actually 4.125!)
-    450);   // Wheel RPM = cartridge * (motor gear / wheel gear)
-
-// Uncomment the trackers you're using here!
-// - `8` and `9` are smart ports (making these negative will reverse the sensor)
-//  - you should get positive values on the encoders going FORWARD and RIGHT
-// - `2.75` is the wheel diameter
-// - `4.0` is the distance from the center of the wheel to the center of the robot
-// ez::tracking_wheel horiz_tracker(8, 2.75, 4.0);  // This tracking wheel is perpendicular to the drive wheels
-// ez::tracking_wheel vert_tracker(9, 2.75, 4.0);   // This tracking wheel is parallel to the drive wheels
-
-/**
- * Runs initialization code. This occurs as soon as the program is started.
+  // These are your drive motors, the first motor is used for sensing!
+  {-5, 6, -7},     // Left Chassis Ports (negative port will reverse it!)
+  {3, -2, 4},  // Right Chassis Ports (negative port will reverse it!)
+  
+  10,      // IMU Port
+  3.25,  // Wheel Diameter (Remember, 4" wheels without screw holes are actually 4.125!)
+  450);   // Wheel RPM = cartridge * (motor gear / wheel gear)
+  
+  // Uncomment the trackers you're using here!
+  // - `8` and `9` are smart ports (making these negative will reverse the sensor)
+  //  - you should get positive values on the encoders going FORWARD and RIGHT
+  // - `2.75` is the wheel diameter
+  // - `4.0` is the distance from the center of the wheel to the center of the robot
+  // ez::tracking_wheel horiz_tracker(8, 2.75, 4.0);  // This tracking wheel is perpendicular to the drive wheels
+  // ez::tracking_wheel vert_tracker(9, 2.75, 4.0);   // This tracking wheel is parallel to the drive wheels
+  
+  pros::Task cascade_compute_task(cascade_task, "cascade computing");
+  //pros::Task wrist_compute_task(wrist_task, "wrist computing");
+  /**
+   * Runs initialization code. This occurs as soon as the program is started.
  *
  * All other competition modes are blocked by initialize; it is recommended
  * to keep execution time for this mode under a few seconds.
@@ -32,7 +34,7 @@ ez::Drive chassis(
 void initialize() {
   // Print our branding over your terminal :D
   ez::ez_template_print();
-
+  
   //Hand_calibrate();
   
   pros::delay(500);  // Stop the user from doing anything while legacy ports configure
@@ -60,6 +62,7 @@ void initialize() {
   
   // Autonomous Selector using LLEMU
   ez::as::auton_selector.autons_add({
+    {"left side three pin\n\npreload 2 on alliance line", leftside_three_pin},
     {"Drive and Turn\n\nDrive forward, turn, come back", drive_and_turn},
     {"Drive\n\nDrive forward and come back", drive_example},
     {"Turn\n\nTurn 3 times.", turn_example},
@@ -81,7 +84,6 @@ void initialize() {
   ez::as::initialize();
   master.rumble(chassis.drive_imu_calibrated() ? "." : "---");
   
-  cascade_sensor.reset();
   wrist_motor.set_encoder_units(pros::MotorEncoderUnits::deg);
   wrist_motor.tare_position_all();
   cascade_sensor.set_position(0);
@@ -129,21 +131,22 @@ void autonomous() {
   chassis.drive_sensor_reset();               // Reset drive sensors to 0
   chassis.odom_xyt_set(0_in, 0_in, 0_deg);    // Set the current position, you can start at a specific position with this
   chassis.drive_brake_set(MOTOR_BRAKE_HOLD);  // Set motors to hold.  This helps autonomous consistency
-
+  
   /*
   Odometry and Pure Pursuit are not magic
-
+  
   It is possible to get perfectly consistent results without tracking wheels,
   but it is also possible to have extremely inconsistent results without tracking wheels.
   When you don't use tracking wheels, you need to:
-   - avoid wheel slip
-   - avoid wheelies
-   - avoid throwing momentum around (super harsh turns, like in the example below)
+  - avoid wheel slip
+  - avoid wheelies
+  - avoid throwing momentum around (super harsh turns, like in the example below)
   You can do cool curved motions, but you have to give your robot the best chance
   to be consistent
   */
+ //cascadePID.exit_condition_set(80, 50, 300, 150, 500, 500);
 
-  ez::as::auton_selector.selected_auton_call();  // Calls selected auton from autonomous selector
+ ez::as::auton_selector.selected_auton_call();  // Calls selected auton from autonomous selector
 }
 
 /**
@@ -174,10 +177,10 @@ void ez_screen_task() {
         if (ez::as::page_blank_is_on(0)) {
           // Display X, Y, and Theta
           ez::screen_print("x: " + util::to_string_with_precision(chassis.odom_x_get()) +
-                               "\ny: " + util::to_string_with_precision(chassis.odom_y_get()) +
-                               "\na: " + util::to_string_with_precision(chassis.odom_theta_get()),
-                           1);  // Don't override the top Page line
-
+          "\ny: " + util::to_string_with_precision(chassis.odom_y_get()) +
+          "\na: " + util::to_string_with_precision(chassis.odom_theta_get()),
+          1);  // Don't override the top Page line
+          
           // Display all trackers that are being used
           screen_print_tracker(chassis.odom_tracker_left, "l", 4);
           screen_print_tracker(chassis.odom_tracker_right, "r", 5);
@@ -186,13 +189,13 @@ void ez_screen_task() {
         }
       }
     }
-
+    
     // Remove all blank pages when connected to a comp switch
     else {
       if (ez::as::page_blank_amount() > 0)
-        ez::as::page_blank_remove_all();
+      ez::as::page_blank_remove_all();
     }
-
+    
     pros::delay(ez::util::DELAY_TIME);
   }
 }
@@ -210,29 +213,29 @@ void ez_template_extras() {
   if (!pros::competition::is_connected()) {
     // PID Tuner
     // - after you find values that you're happy with, you'll have to set them in auton.cpp
-
+    
     // Enable / Disable PID Tuner
     //  When enabled:
     //  * use A and Y to increment / decrement the constants
     //  * use the arrow keys to navigate the constants
     if (master.get_digital_new_press(DIGITAL_X))
-      chassis.pid_tuner_toggle();
-
+    chassis.pid_tuner_toggle();
+    
     // Trigger the selected autonomous routine
     if (master.get_digital(DIGITAL_B) && master.get_digital(DIGITAL_DOWN)) {
       pros::motor_brake_mode_e_t preference = chassis.drive_brake_get();
       autonomous();
       chassis.drive_brake_set(preference);
-     }
-
+    }
+    
     // Allow PID Tuner to iterate
     chassis.pid_tuner_iterate();
   }
-
+  
   // Disable PID Tuner when connected to a comp switch
   else {
     if (chassis.pid_tuner_enabled())
-      chassis.pid_tuner_disable();
+    chassis.pid_tuner_disable();
   }
 }
 
@@ -252,17 +255,19 @@ void ez_template_extras() {
 void opcontrol() {
   // This is preference to what you like to drive on
   chassis.drive_brake_set(MOTOR_BRAKE_COAST);
-  pros::Task Wrist_task(Cascade_opcontrol, "cascade operator control");
-
+  pros::Task cascade_task(Cascade_opcontrol, "cascade operator control");
+  
   while (true) {
     // Gives you some extras to make EZ-Template ezier
     //ez_template_extras();
-    ez::screen_print("cascade position centigrade: " + to_string(cascade_sensor.get_position() / 100), 0);
+    
     Drivetrain_opcontrol();
     //Cascade_opcontrol(); //being run in task above line 255.
-    //Wrist_autcontrol();
     Ratchet_claw_opcontrol(); 
     Wrist_opcontrol();
+    if (master.get_digital_new_press(DIGITAL_LEFT)) {
+      score();
+    }
     pros::delay(ez::util::DELAY_TIME);  // This is used for timer calculations!  Keep this ez::util::DELAY_TIME
   }
 }

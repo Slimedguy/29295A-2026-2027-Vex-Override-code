@@ -35,7 +35,7 @@ void Wrist_opcontrol() {
     }
 
     if (wristState == 1) {
-        if (wrist_motor.get_current_draw() >= 2000) {
+        if (wrist_motor.get_current_draw() >= 1900) {
             wrist_motor.brake();
             wristState = 2;
         }
@@ -44,7 +44,7 @@ void Wrist_opcontrol() {
         }
     }
     else if (wristState == 0) {
-        if (wrist_motor.get_current_draw() >= 2000) {
+        if (wrist_motor.get_current_draw() >= 1900) {
             wrist_motor.brake();
             wristState = 3;
         }
@@ -63,13 +63,33 @@ void Wrist_opcontrol() {
     }
 }
 
-void Wrist_autcontrol() {
-    if (cascade_sensor.get_position() < 180) {
-        wrist_motor.move_absolute(0, 200);
+void wrist_task() {
+    if (wristState == 1) {
+        if (wrist_motor.get_current_draw() >= 1900) {
+            wrist_motor.brake();
+            wristState = 2;
+        }
+        else {
+            wrist_motor.move(-127);
+        }
     }
-    else if (cascade_sensor.get_position() > 180) {
-        wrist_motor.move_absolute(-90, 200); //negative will rotate the arm up
+    else if (wristState == 0) {
+        if (wrist_motor.get_current_draw() >= 1900) {
+            wrist_motor.brake();
+            wristState = 3;
+        }
+        else {
+            wrist_motor.move(127);
+        }
     }
+    else if (wristState == 2) {
+        wrist_motor.move(-5);
+    }
+    else if (wristState == 3) {
+        wrist_motor.move(10);
+    }
+    else {
+        wrist_motor.brake();
+    }
+    pros::delay(ez::util::DELAY_TIME);
 }
-
-//void Hand_calibrate();

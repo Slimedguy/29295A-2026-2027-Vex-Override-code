@@ -1,7 +1,7 @@
 {
   "py/object": "pros.conductor.project.Project",
   "py/state": {
-    "project_name": "16,5 cascade",
+    "project_name": "test",
     "target": "v5",
     "templates": {
       "EZ-Template": {
@@ -426,7 +426,7 @@
     "upload_options": {
       "description": "29295A code",
       "icon": "X",
-      "slot": 5,
+      "slot": 2,
       "after": "screen"
     },
     "use_early_access": false

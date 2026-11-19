@@ -5,4 +5,6 @@
 
 extern int cascade_target;
 extern void Cascade_opcontrol();
-extern void Cascade_calibrate();
+extern void set_cascade(int input);
+extern void cascade_task();
+extern void score();

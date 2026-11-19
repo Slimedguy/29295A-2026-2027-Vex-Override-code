@@ -6,8 +6,8 @@
 /////
 
 // These are out of 127
-const int DRIVE_SPEED = 110;
-const int TURN_SPEED = 90;
+const int DRIVE_SPEED = 90;
+const int TURN_SPEED = 70;
 const int SWING_SPEED = 110;
 
 ///
@@ -382,3 +382,65 @@ void measure_offsets() {
 // . . .
 // Make your own autonomous functions here!
 // . . .
+
+
+void leftside_three_pin() {
+  chassis.pid_drive_set(3.1_in, 40);
+  chassis.pid_wait_quick_chain();
+  chassis.pid_drive_set(-3.1_in, 40);
+  chassis.pid_wait_quick();
+  chassis.pid_drive_set(3.3_in, 40);
+  chassis.pid_wait_quick_chain();
+
+  Ratchet_claw.move(100);
+  
+  chassis.pid_drive_set(-12.8_in, DRIVE_SPEED);
+  chassis.pid_wait_quick();
+  
+  chassis.pid_turn_set(86, TURN_SPEED);
+  chassis.pid_wait_quick();
+  
+  wrist_motor.move_relative(270, 100);
+  cascadePID.target_set(110);
+
+  chassis.pid_drive_set(-14_in, DRIVE_SPEED);
+  chassis.pid_wait();
+  
+  score();
+  
+  pros::delay(50);
+  
+  chassis.pid_drive_set(9_in, DRIVE_SPEED);
+  chassis.pid_wait_quick();
+  wrist_motor.move(100);
+  Ratchet_claw.move(0);
+  
+  chassis.pid_turn_set(31, TURN_SPEED);
+  cascadePID.target_set(0);
+  chassis.pid_wait_quick();
+  wrist_motor.move(10);
+  
+  Ratchet_claw.move(100);
+  chassis.pid_drive_set(-23_in, 40);
+  chassis.pid_wait_quick();
+  cascadePID.target_set(120);
+  
+  chassis.pid_drive_set(-6_in, 40);
+  chassis.pid_wait_quick();
+  
+  // chassis.pid_drive_set(-5_in, 40);
+  // chassis.pid_wait_quick();
+  // cascadePID.target_set(260);
+  
+  // chassis.pid_drive_set(-6_in, 40);
+  // chassis.pid_wait_quick();
+  // Ratchet_claw.brake();
+  
+  // chassis.pid_turn_set(174, TURN_SPEED);
+  // chassis.pid_wait_quick();
+  
+  // chassis.pid_drive_set(-18_in, DRIVE_SPEED);
+  // chassis.pid_wait_quick();
+
+  pros::delay(400); //! REMOVE AFTER TESTING
+}
