@@ -105,7 +105,8 @@ void cascade_task() {
 
 // score
 void score() {
+    wrist_motor.move(-127);
+    wristState = 1;
     cascadePID.target_set(0);
     cascade_target = 0;
-    Ratchet_claw.move(-127);
 }

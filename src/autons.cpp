@@ -401,14 +401,16 @@ void leftside_three_pin() {
   chassis.pid_wait_quick();
   
   wrist_motor.move_relative(270, 100);
-  cascadePID.target_set(110);
-
+  cascadePID.target_set(50);
+  
   chassis.pid_drive_set(-14_in, DRIVE_SPEED);
-  chassis.pid_wait();
+  chassis.pid_wait_quick();
   
   score();
   
   pros::delay(50);
+  Ratchet_claw.move(-127);
+  wrist_motor.move(-5);
   
   chassis.pid_drive_set(9_in, DRIVE_SPEED);
   chassis.pid_wait_quick();
@@ -418,7 +420,7 @@ void leftside_three_pin() {
   chassis.pid_turn_set(31, TURN_SPEED);
   cascadePID.target_set(0);
   chassis.pid_wait_quick();
-  wrist_motor.move(10);
+  wrist_motor.move(20);
   
   Ratchet_claw.move(100);
   chassis.pid_drive_set(-23_in, 40);
@@ -428,19 +430,39 @@ void leftside_three_pin() {
   chassis.pid_drive_set(-6_in, 40);
   chassis.pid_wait_quick();
   
-  // chassis.pid_drive_set(-5_in, 40);
-  // chassis.pid_wait_quick();
-  // cascadePID.target_set(260);
+  chassis.pid_turn_set(176, TURN_SPEED);
+  chassis.pid_wait_quick();
+  cascadePID.target_set(320);
   
-  // chassis.pid_drive_set(-6_in, 40);
-  // chassis.pid_wait_quick();
-  // Ratchet_claw.brake();
+  chassis.pid_drive_set(-20_in, 50);
+  chassis.pid_wait_quick();
+  chassis.pid_drive_set(-1_in, 50);
+  chassis.pid_wait_quick();
   
-  // chassis.pid_turn_set(174, TURN_SPEED);
-  // chassis.pid_wait_quick();
+  cascadePID.target_set(240);
+  pros::delay(20);
+  Ratchet_claw.move(-127);
+  pros::delay(10);
   
-  // chassis.pid_drive_set(-18_in, DRIVE_SPEED);
-  // chassis.pid_wait_quick();
-
+  chassis.pid_drive_set(10_in, 50);
+  chassis.pid_wait_quick();
+  Ratchet_claw.move(127);
+  
+  cascadePID.target_set(10);
+  chassis.pid_turn_set(124, TURN_SPEED);
+  chassis.pid_wait_quick();
+  
+  chassis.pid_drive_set(-20_in, 50);
+  chassis.pid_wait_quick();
+  
+  chassis.pid_drive_set(-6_in, 40);
+  cascadePID.target_set(50);
+  chassis.pid_wait_quick();
+  
+  cascadePID.target_set(520);
+  
+  chassis.pid_turn_set(270, TURN_SPEED);
+  chassis.pid_wait_quick();
+  
   pros::delay(400); //! REMOVE AFTER TESTING
 }
