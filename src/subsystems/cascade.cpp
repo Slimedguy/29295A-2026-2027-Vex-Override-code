@@ -39,8 +39,10 @@ void Cascade_opcontrol() {
             }
             
             if (button_state == "pressed") {
-                cascade_position += 1;
-                if (cascade_position > cascade_position_list.size() - 1) {cascade_position = 0;}
+                if (cascade_position < cascade_position_list.size()) {
+                    cascade_position += 1;
+                }
+                // if (cascade_position > cascade_position_list.size() - 1) {cascade_position = 0;}
                 cascade_target = cascade_position_list[cascade_position] * max_cascade_height;
                 button_state = "unknown";
             }
@@ -70,8 +72,10 @@ void Cascade_opcontrol() {
             }
             
             if (button_state == "pressed") {
-                cascade_position -= 1;
-                if (cascade_position < 0) {cascade_position = cascade_position_list.size() - 1;}
+                if (cascade_position > 0){
+                    cascade_position -= 1;
+                }
+                // if (cascade_position < 0) {cascade_position = cascade_position_list.size() - 1;}
                 cascade_target = cascade_position_list[cascade_position] * max_cascade_height;
                 button_state = "unknown";
             }
@@ -85,6 +89,7 @@ void Cascade_opcontrol() {
         }
         else {
             cascadePID.target_set(cascade_target);
+            cascade_motor.move(cascadePID.compute(cascade_sensor.get_position() / 100.0));
         }
 
         pros::delay(20);
@@ -95,7 +100,7 @@ void Cascade_opcontrol() {
 void cascade_task() {
     cascade_sensor.reset_position();
     cascadePID.target_set(0);
-    pros::delay(2000);
+    pros::delay(100);
     while (true) {
         cascade_motor.move(cascadePID.compute(cascade_sensor.get_position() / 100.0));
 
@@ -109,4 +114,51 @@ void score() {
     wristState = 1;
     cascadePID.target_set(0);
     cascade_target = 0;
+}
+
+void intake() {
+    wrist_motor.move(-127);
+    wristState = 1;
+    cascadePID.target_set(0);
+    cascade_target = 0;
+    
+    Ratchet_claw.move(127);
+    pros::delay(50);
+    
+    wrist_motor.move(127);
+    wristState = 0;
+    cascadePID.target_set(100);
+    cascade_target = 1;
+
+}
+
+
+
+
+
+
+void press_and_hold_example() {
+    if (master.get_digital(DIGITAL_A)) {
+        //* code here
+    }
+}
+
+void press_example() {
+    if (master.get_digital_new_press(DIGITAL_B)) {
+        //* code here
+    }
+}
+
+bool toggle = false;
+void toggle_example() {
+    if (master.get_digital_new_press(DIGITAL_X)) {
+        toggle = !toggle;
+    }
+
+    if (toggle) {
+        //* code here
+    }
+    else if (!toggle) {
+        //* code here
+    }
 }

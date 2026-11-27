@@ -403,8 +403,8 @@ void leftside_three_pin() {
   wrist_motor.move_relative(270, 100);
   cascadePID.target_set(50);
   
-  chassis.pid_drive_set(-14_in, DRIVE_SPEED);
-  chassis.pid_wait_quick();
+  chassis.pid_drive_set(-13_in, DRIVE_SPEED); //! check later, score 1 gap issue
+  chassis.pid_wait(); //! also changed
   
   score();
   

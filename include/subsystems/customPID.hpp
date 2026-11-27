@@ -12,4 +12,4 @@
  *: Add PID for cascade lift. also make proper controls for this PID
  */
 
- inline ez::PID cascadePID({2, 0, 1.5, 0, "Cascade"});
+ inline ez::PID cascadePID({2.5, 0, 0, 0, "Cascade"});

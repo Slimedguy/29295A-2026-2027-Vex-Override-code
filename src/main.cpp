@@ -255,6 +255,7 @@ void ez_template_extras() {
 void opcontrol() {
   // This is preference to what you like to drive on
   chassis.drive_brake_set(MOTOR_BRAKE_COAST);
+  cascade_compute_task.remove();
   pros::Task cascade_task(Cascade_opcontrol, "cascade operator control");
   
   while (true) {
@@ -266,6 +267,10 @@ void opcontrol() {
     Ratchet_claw_opcontrol(); 
     Wrist_opcontrol();
     if (master.get_digital_new_press(DIGITAL_LEFT)) {
+      score();
+    }
+
+    if (master.get_digital_new_press(DIGITAL_X)) {
       score();
     }
     pros::delay(ez::util::DELAY_TIME);  // This is used for timer calculations!  Keep this ez::util::DELAY_TIME

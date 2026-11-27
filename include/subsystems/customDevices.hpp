@@ -20,6 +20,6 @@ inline pros::MotorGroup cascade_motor({-16, 1}, pros::v5::MotorGears::green);
 inline pros::MotorGroup Ratchet_claw({15, -19}, pros::v5::MotorGears::green);
 inline pros::Motor wrist_motor(12, pros::v5::MotorGears::green);
 
-inline pros::Rotation cascade_sensor(-13);
+inline pros::Rotation cascade_sensor(11);
 
 inline pros::adi::DigitalIn cascade_limit_switch('G');
